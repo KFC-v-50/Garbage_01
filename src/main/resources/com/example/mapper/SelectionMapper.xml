@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.SelectionMapper">
+    <sql id="commonSelect">
+        select stu_id, course_id, score, university, ordinary, ending
+        from selection
+    </sql>
+    <select id="pageList" resultType="com.example.pojo.Score">
+        <include refid="commonSelect" />
+        <where>
+            <if test="courseIds != null and !courseIds.isEmpty()">
+                and course_id in
+                <foreach collection="courseIds" item="courseId" separator="," open="(" close=")">
+                    #{courseId}
+                </foreach>
+            </if>
+            <if test="stuIds != null and !stuIds.isEmpty()">
+                and stu_id in
+                <foreach collection="stuIds" item="stuId" separator="," open="(" close=")">
+                    #{stuId}
+                </foreach>
+            </if>
+            <if test="university != null and university != ''">
+                and university=#{university}
+            </if>
+        </where>
+        order by stu_id desc
+    </select>
+</mapper>
