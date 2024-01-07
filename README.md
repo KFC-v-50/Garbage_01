@@ -1,4 +1,4 @@
-# AdministrationSchool
+# 666
 In the third year, the software construction course has an experimental assignment
 
 # 分支：main
