@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.CourseMapper">
+
+    <sql id="commonSelect">
+        select course_id, course_name, teacher_id, classroom, time, date, type, description, state, college, credit, volume
+        from course
+    </sql>
+
+    <select id="pageList" resultType="com.example.pojo.Course">
+        <include refid="commonSelect" />
+        <where>
+            <if test="courseName !=null and courseName != ''">
+                course_name like concat('%',#{courseName},'%')
+            </if>
+            <if test="time != null">
+                and time=#{time}
+            </if>
+            <if test="date != null">
+                and date=#{date}
+            </if>
+            <if test="type != null and type != ''">
+                and type=#{type}
+            </if>
+            <if test="university != null and university != ''">
+                and university=#{university}
+            </if>
+            <if test="college != null and college != ''">
+                and college like concat('%',#{college},'%')
+            </if>
+            <if test="teacherIds != null and !teacherIds.isEmpty()">
+                and teacher_id in
+                <foreach collection="teacherIds" item="teacherId" separator="," open="(" close=")">
+                    #{teacherId}
+                </foreach>
+            </if>
+            <if test="state != null">
+                and state = #{state}
+            </if>
+        </where>
+        order by course_id desc
+    </select>
+</mapper>

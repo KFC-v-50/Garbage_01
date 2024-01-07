@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.ApplyMapper">
+
+    <sql id="commonSelect">
+        select course_id, situation, administrator, reason, university, year, trimesters, create_time, update_time, submit
+        from apply
+    </sql>
+
+    <select id="pageList" resultType="com.example.pojo.Apply">
+        <include refid="commonSelect" />
+        <where>
+            <if test="year != null and year != ''">
+                year=#{year}
+            </if>
+            <if test="trimesters != null">
+                and trimesters=#{trimesters}
+            </if>
+            <if test="university != null and university != ''">
+                and university=#{university}
+            </if>
+            <if test="begin !=null and end != null">
+                and create_time between #{begin} and #{end}
+            </if>
+            <if test="courseIds != null and !courseIds.isEmpty()">
+                and teacher_id in
+                <foreach collection="courseIds" item="courseId" separator="," open="(" close=")">
+                    #{courseId}
+                </foreach>
+            </if>
+            <if test="stuId != null">
+                and stu_id=#{stuId}
+            </if>
+            <if test="staffId != null">
+                and administrator=#{staffId}
+            </if>
+        </where>
+        order by course_id desc
+    </select>
+</mapper>
